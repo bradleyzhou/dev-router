@@ -28,6 +28,7 @@ func (rule *RequestDispatchRule) Match(path string) bool {
 
 // Direct TODO
 func (rule *RequestDispatchRule) Direct(path string) DirectedLocation {
+	// rudimentary support for directing to a dynamic path if replacer is "${PATH}"
 	var newPath string
 	if rule.PathReplacer == "${PATH}" {
 		newPath = path

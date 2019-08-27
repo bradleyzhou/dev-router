@@ -3,7 +3,6 @@ package modifier
 import (
 	"net/http"
 	"regexp"
-	"strings"
 )
 
 // AddRequestCookieRule TOOD
@@ -30,8 +29,10 @@ type CookieAdder struct {
 
 // Add TODO
 func (adder *CookieAdder) Add(domain2 string, domain3 string, req *http.Request) {
-	v := strings.ReplaceAll(adder.Value, "${DOMAIN}", domain2)
-	v = strings.ReplaceAll(v, "${DOMAIN_2}", domain2)
-	v = strings.ReplaceAll(v, "${DOMAIN_3}", domain3)
+	v := writeTemplate([]simpleTemplateKeyword{
+		{Key: "${DOMAIN}", Value: domain2},
+		{Key: "${DOMAIN_2}", Value: domain2},
+		{Key: "${DOMAIN_3}", Value: domain3},
+	}, adder.Value)
 	req.AddCookie(&http.Cookie{Name: adder.Name, Value: v})
 }
