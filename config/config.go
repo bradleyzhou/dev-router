@@ -19,8 +19,8 @@ type StaticServer struct {
 	Root   string `json:"root"`
 }
 
-// DispatchDesination TODO
-type DispatchDesination struct {
+// DispatchDestination is the destination part of a request dispatcher.
+type DispatchDestination struct {
 	Server       string `json:"server"`
 	Scheme       string `json:"scheme"`
 	Host         string `json:"host"`
@@ -30,8 +30,8 @@ type DispatchDesination struct {
 
 // DispatchRule TODO
 type DispatchRule struct {
-	PathMatcher string             `json:"path"`
-	Destination DispatchDesination `json:"destination"`
+	PathMatcher string              `json:"path"`
+	Destination DispatchDestination `json:"destination"`
 }
 
 // ResponseModifier TODO

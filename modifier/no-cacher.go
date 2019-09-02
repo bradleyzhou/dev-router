@@ -14,7 +14,7 @@ var noCacheHeaders = map[string]string{
 	"X-Accel-Expires": "0",
 }
 
-var etagHeaders = []string{
+var eTagHeaders = []string{
 	"ETag",
 	"If-Modified-Since",
 	"If-Match",
@@ -27,7 +27,7 @@ var etagHeaders = []string{
 func NoCache(h http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
 		// Delete any ETag headers that may have been set
-		for _, v := range etagHeaders {
+		for _, v := range eTagHeaders {
 			if r.Header.Get(v) != "" {
 				r.Header.Del(v)
 			}
