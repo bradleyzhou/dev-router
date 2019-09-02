@@ -39,6 +39,14 @@
         }
     ],
 
+    "addRequestCookie": [
+        {
+            "path": "^\\/",
+            "name": "dev-router-1",
+            "value": "upstream-server-will-see-this"
+        }
+    ],
+
     "responseModifiers": {
         "header": [
             {
@@ -62,5 +70,12 @@
                 "replacer": "http://${HOST}/validw3"
             }
         ]
-    }
+    },
+
+    "addResponseHeader": [
+        {
+            "name": "X-DEV",
+            "Value": "dev-router-modded"
+        }
+    ]
 }
