@@ -10,7 +10,6 @@ import (
 	"log"
 	"net/http"
 	"net/http/httputil"
-	"strings"
 
 	"github.com/bradleyzhou/dev-router/config"
 	"github.com/bradleyzhou/dev-router/configure"
@@ -26,29 +25,8 @@ func patchResponseBody(host string, body []byte, rules []modifier.PatchBodyRule)
 	return body
 }
 
-// extractDomainName turns a host name into 2nd-level and 3rd-level domain names.
-// For example, "www.a.example.com" --> domain2: "example.com", domain3: "a.example.com"
-func extractDomainName(host string) (domain2 string, domain3 string) {
-	noPort := strings.Split(host, ":")[0]
-	domains := strings.Split(noPort, ".")
-	nSubs := len(domains)
-	var dn1, dn2, dn3 string
-	dn1 = domains[nSubs-1]
-	dn2 = dn1
-	dn3 = dn2
-	if nSubs > 1 {
-		dn2 = domains[nSubs-2] + "." + dn1
-		dn3 = dn2
-	}
-	if nSubs > 2 {
-		dn3 = domains[nSubs-3] + "." + dn3
-	}
-	return dn2, dn3
-}
-
 func serveReverseProxy(res http.ResponseWriter, req *http.Request) {
-	originReqHost := req.Host
-	originReqDomain2, originReqDomain3 := extractDomainName(originReqHost)
+	originReqHost := modifier.CompileHostDomain(req.Host)
 
 	director := func(req *http.Request) {
 		log.Printf("----->>> Request received.")
@@ -74,7 +52,7 @@ func serveReverseProxy(res http.ResponseWriter, req *http.Request) {
 				case "":
 					// use the host in the default rule
 				case "${HOST}":
-					directedHost = originReqHost
+					directedHost = originReqHost.Host
 				default:
 					directedHost = dst.Host
 				}
@@ -84,7 +62,7 @@ func serveReverseProxy(res http.ResponseWriter, req *http.Request) {
 					// use the server in the default rule
 					directedServer = directedHost
 				case "${HOST}":
-					directedServer = originReqHost
+					directedServer = originReqHost.Host
 				default:
 					directedServer = dst.Server
 				}
@@ -98,7 +76,7 @@ func serveReverseProxy(res http.ResponseWriter, req *http.Request) {
 
 		for _, r := range serverConf.ReqAddCookieRules {
 			if r.Match(req.URL.Path) {
-				r.AddCookie(originReqDomain2, originReqDomain3, req)
+				r.AddCookie(originReqHost, req)
 			}
 		}
 
@@ -137,11 +115,11 @@ func serveReverseProxy(res http.ResponseWriter, req *http.Request) {
 		res.Header.Set("Access-Control-Allow-Origin", "*")
 
 		for _, r := range serverConf.ResHeaderRules {
-			r.Patch(originReqDomain2, originReqDomain3, res.Header)
+			r.Patch(originReqHost, res.Header)
 		}
 
 		for _, r := range serverConf.ResAddHeaderRules {
-			r.Add(originReqDomain2, originReqDomain3, res.Header)
+			r.Add(originReqHost, res.Header)
 		}
 
 		// extract gzipped content for modifications
@@ -155,7 +133,7 @@ func serveReverseProxy(res http.ResponseWriter, req *http.Request) {
 			resBody, _ = ioutil.ReadAll(res.Body)
 		}
 
-		modBody := bytes.NewReader(patchResponseBody(originReqHost, resBody, serverConf.BodyRules))
+		modBody := bytes.NewReader(patchResponseBody(originReqHost.Host, resBody, serverConf.BodyRules))
 		res.Body = ioutil.NopCloser(modBody)
 		res.Header["Content-Length"] = []string{fmt.Sprint(modBody.Len())}
 

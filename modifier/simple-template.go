@@ -17,3 +17,14 @@ func writeTemplate(keys []simpleTemplateKeyword, raw string) string {
 	}
 	return v
 }
+
+// simpleHostDomainTemplate replaces ${HOST} and ${DOMAIN} with a provided host and domain.
+// Useful for dynamically replace the host name and domain name.
+func simpleHostDomainTemplate(host HostDomain, raw string) string {
+	return writeTemplate([]simpleTemplateKeyword{
+		{Key: "${HOST}", Value: host.Host},
+		{Key: "${DOMAIN}", Value: host.Domain2},
+		{Key: "${DOMAIN_2}", Value: host.Domain2},
+		{Key: "${DOMAIN_3}", Value: host.Domain3},
+	}, raw)
+}
