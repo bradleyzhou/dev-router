@@ -18,8 +18,10 @@ Why?
 
 For example:
 
+Get a released bin from [the releases](releases), or build your own by `go install`.
+
+Then:
 ```bash
-go install
 dev-router -conf=example/config.json
 ```
 
