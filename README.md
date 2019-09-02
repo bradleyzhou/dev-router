@@ -18,7 +18,7 @@ Why?
 
 For example:
 
-Get a released bin from [the releases](releases), or build your own by `go install`.
+Get a released bin from [the releases](https://github.com/bradleyzhou/dev-router/releases), or build your own by `go install`.
 
 Then:
 ```bash
