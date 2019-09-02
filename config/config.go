@@ -1,4 +1,4 @@
-// Package config represents the user provided config file structure. Right now with JSON support.
+// Package config represents the user provided config file structure. Right now with only JSON support.
 package config
 
 import (
@@ -7,13 +7,13 @@ import (
 	"os"
 )
 
-// Server TODO
+// Server is the section for the router server itself.
 type Server struct {
 	Port   string `json:"port"`
 	Scheme string `json:"scheme"`
 }
 
-// StaticServer TODO
+// StaticServer is the section for the additional local static file server.
 type StaticServer struct {
 	Prefix string `json:"prefix"`
 	Root   string `json:"root"`
@@ -28,7 +28,7 @@ type DispatchDestination struct {
 	URL          string `json:"url"`
 }
 
-// DispatchRule TODO
+// DispatchRule is a single entry for the request dispatcher section.
 type DispatchRule struct {
 	PathMatcher string              `json:"path"`
 	Destination DispatchDestination `json:"destination"`
@@ -40,33 +40,33 @@ type ResponseModifier struct {
 	BodyPatchers   []PatchBodyRule   `json:"body"`
 }
 
-// PatchBodyRule TODO
+// PatchBodyRule is a single entry for the patch body section.
 type PatchBodyRule struct {
 	Matcher  string `json:"matcher"`
 	Replacer string `json:"replacer"`
 }
 
-// PatchHeaderRule TODO
+// PatchHeaderRule is a single entry for the modify header section.
 type PatchHeaderRule struct {
 	Name     string `json:"name"`
 	Matcher  string `json:"matcher"`
 	Replacer string `json:"replacer"`
 }
 
-// AddHeaderRule TODO
+// AddHeaderRule is a single entry for add-header sections.
 type AddHeaderRule struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`
 }
 
-// AddRequestCookieRule TODO
+// AddRequestCookieRule is a single entry for add-request-cookie.
 type AddRequestCookieRule struct {
 	PathMatcher string `json:"path"`
 	Name        string `json:"name"`
 	Value       string `json:"value"`
 }
 
-// Config TODO
+// Config represents the whole JSON config file structure.
 type Config struct {
 	Server        Server         `json:"server"`
 	Upstream      string         `json:"upstream"`

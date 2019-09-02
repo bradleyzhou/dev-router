@@ -26,6 +26,8 @@ func patchResponseBody(host string, body []byte, rules []modifier.PatchBodyRule)
 	return body
 }
 
+// extractDomainName turns a host name into 2nd-level and 3rd-level domain names.
+// For example, "www.a.example.com" --> domain2: "example.com", domain3: "a.example.com"
 func extractDomainName(host string) (domain2 string, domain3 string) {
 	noPort := strings.Split(host, ":")[0]
 	domains := strings.Split(noPort, ".")
@@ -142,6 +144,7 @@ func serveReverseProxy(res http.ResponseWriter, req *http.Request) {
 			r.Add(originReqDomain2, originReqDomain3, res.Header)
 		}
 
+		// extract gzipped content for modifications
 		var resBody []byte
 		switch res.Header.Get("Content-Encoding") {
 		case "gzip":

@@ -4,13 +4,13 @@ import (
 	"net/http"
 )
 
-// AddHeaderRule TODO
+// AddHeaderRule represents a header entry. Value supports dynamic "${DOMAIN}".
 type AddHeaderRule struct {
 	Name  string
 	Value string
 }
 
-// Add TODO
+// Add modifies the header by adding a new header entry. Supports dynamic "${DOMAIN}".
 func (rule *AddHeaderRule) Add(domain2 string, domain3 string, header http.Header) {
 	v := writeTemplate([]simpleTemplateKeyword{
 		{Key: "${DOMAIN}", Value: domain2},

@@ -9,6 +9,7 @@ type simpleTemplateKeyword struct {
 	Value string
 }
 
+// writeTemplate is a rudimentary template engine.
 func writeTemplate(keys []simpleTemplateKeyword, raw string) string {
 	v := raw
 	for _, key := range keys {

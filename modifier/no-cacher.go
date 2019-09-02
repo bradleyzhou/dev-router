@@ -23,7 +23,8 @@ var eTagHeaders = []string{
 	"If-Unmodified-Since",
 }
 
-// NoCache copied from https://stackoverflow.com/a/33881296
+// NoCache wraps the Handler with a no cache header, replacing the existing headers.
+// Copied from https://stackoverflow.com/a/33881296
 func NoCache(h http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
 		// Delete any ETag headers that may have been set

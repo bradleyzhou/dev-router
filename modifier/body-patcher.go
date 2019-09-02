@@ -5,7 +5,7 @@ import (
 	"regexp"
 )
 
-// PatchBodyRule represents a rule to modify a (response) body
+// PatchBodyRule represents a rule to modify a (response) body.
 type PatchBodyRule struct {
 	// Matcher is the regex pattern to be replaced
 	Matcher *regexp.Regexp

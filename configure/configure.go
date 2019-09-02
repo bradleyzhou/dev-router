@@ -1,4 +1,4 @@
-// Package configure translates configs into rules and settings for the router server
+// Package configure translates configs into rules and settings for the router server.
 package configure
 
 import (
