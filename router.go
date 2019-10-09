@@ -67,7 +67,7 @@ func serveReverseProxy(res http.ResponseWriter, req *http.Request) {
 					directedServer = dst.Server
 				}
 
-				if dst.Path != "" && dst.Path != "/" {
+				if dst.Path != "" {
 					req.URL.Path = dst.Path
 				}
 				break
