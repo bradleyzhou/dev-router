@@ -17,5 +17,5 @@ type PatchBodyRule struct {
 // ReplaceAll will search and replace the response body according to the rule.
 func (rule *PatchBodyRule) ReplaceAll(host string, body []byte) []byte {
 	replacer := bytes.ReplaceAll(rule.Replacer, []byte("${HOST}"), []byte(host))
-	return rule.Matcher.ReplaceAllLiteral(body, replacer)
+	return rule.Matcher.ReplaceAll(body, replacer)
 }
