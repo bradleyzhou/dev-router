@@ -26,6 +26,8 @@ func (rule *RequestDispatchRule) Match(path string) bool {
 	return rule.PathMatcher.MatchString(path)
 }
 
+var expandable = regexp.MustCompile("\\$({\\d+}|\\d+)")
+
 // Direct turns a path into an appropriate DirectedLocation for later consumption.
 // Supports the dynamic "${PATH}" in target path.
 func (rule *RequestDispatchRule) Direct(path string) DirectedLocation {
@@ -37,10 +39,17 @@ func (rule *RequestDispatchRule) Direct(path string) DirectedLocation {
 		newPath = rule.PathMatcher.ReplaceAllString(path, rule.PathReplacer)
 	}
 
+	var newHost string
+	if expandable.MatchString(rule.DstHost) {
+		newHost = rule.PathMatcher.ReplaceAllString(path, rule.DstHost)
+	} else {
+		newHost = rule.DstHost
+	}
+
 	return DirectedLocation{
 		Server: rule.DstServer,
 		Scheme: rule.DstScheme,
-		Host:   rule.DstHost,
+		Host:   newHost,
 		Path:   newPath,
 	}
 }
