@@ -28,6 +28,12 @@ type DispatchDestination struct {
 	URL          string `json:"url"`
 }
 
+// SleepRule is a single entry for the request sleeper section.
+type SleepRule struct {
+	PathMatcher  string `json:"path"`
+	SleepSeconds uint   `json:"seconds"`
+}
+
 // DispatchRule is a single entry for the request dispatcher section.
 type DispatchRule struct {
 	PathMatcher string              `json:"path"`
@@ -73,6 +79,7 @@ type Config struct {
 	DisableTLS    bool           `json:"disableTLSVerify"`
 	StaticServers []StaticServer `json:"staticServers"`
 
+	RequestSleepers      []SleepRule            `json:"requestSleepers"`
 	RequestDispatchers   []DispatchRule         `json:"requestDispatchers"`
 	ResponseModifiers    ResponseModifier       `json:"responseModifiers"`
 	ResponseHeaderAdders []AddHeaderRule        `json:"addResponseHeader"`

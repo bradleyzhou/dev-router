@@ -7,6 +7,7 @@ Start a HTTP server and it will modify the requests your send, and the responses
 Use cases:
 - You only want to replace some static JS and CSS files with local files for an existing website.
 - You want to direct one set of requests to site A, and another set of requests to site B.
+- You want to manually delay some request by a certain amount of seconds.
 - And many more ...
 
 Why?

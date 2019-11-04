@@ -10,6 +10,7 @@ import (
 	"log"
 	"net/http"
 	"net/http/httputil"
+	"time"
 
 	"github.com/bradleyzhou/dev-router/config"
 	"github.com/bradleyzhou/dev-router/configure"
@@ -30,6 +31,13 @@ func serveReverseProxy(res http.ResponseWriter, req *http.Request) {
 
 	director := func(req *http.Request) {
 		log.Printf("----->>> Request received.")
+
+		for _, r := range serverConf.SleepRules {
+			if r.Match(req.URL.Path) && r.SleepSec > 0 {
+				log.Printf("----- sleep for %v seconds", r.SleepSec)
+				time.Sleep(time.Duration(r.SleepSec) * time.Second)
+			}
+		}
 
 		directedScheme := serverConf.DefaultRequestDispatchRule.DstScheme
 		directedHost := serverConf.DefaultRequestDispatchRule.DstHost

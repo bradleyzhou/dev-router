@@ -12,6 +12,14 @@
     ],
 
     "upstream": "https://www.w3.org",
+
+    "requestSleepers": [
+        {
+            "path": "^\\/[^u][^s][^e].*favicon.ico$",
+            "seconds": 5
+        }
+    ],
+
     "requestDispatchers": [
         {
             "path": "^\\/[^u][^s][^e].*favicon.ico$",

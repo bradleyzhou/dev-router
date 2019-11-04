@@ -21,6 +21,7 @@ type Config struct {
 
 	DefaultRequestDispatchRule modifier.RequestDispatchRule
 	RequestDispatchRules       []modifier.RequestDispatchRule
+	SleepRules                 []modifier.RequestSleepRule
 }
 
 // CompileConfig turns a config (read from file) into modifier rules and settings used by the router.
@@ -34,6 +35,7 @@ func CompileConfig(conf config.Config) Config {
 		ResHeaderRules:             compileHeaderPatchers(conf.ResponseModifiers.HeaderPatchers),
 		ResAddHeaderRules:          compileHeaderAdders(conf.ResponseHeaderAdders),
 		ReqAddCookieRules:          compileReqCookieAdders(conf.RequestCookieAdders),
+		SleepRules:                 compileSleepers(conf.RequestSleepers),
 	}
 }
 
@@ -74,6 +76,15 @@ func compileHeaderPatchers(raw []config.PatchHeaderRule) []modifier.PatchHeaderR
 		compiled[i].Name = r.Name
 		compiled[i].Matcher = regexp.MustCompile(r.Matcher)
 		compiled[i].Replacer = r.Replacer
+	}
+	return compiled
+}
+
+func compileSleepers(raw []config.SleepRule) []modifier.RequestSleepRule {
+	compiled := make([]modifier.RequestSleepRule, len(raw))
+	for i, r := range raw {
+		compiled[i].PathMatcher = regexp.MustCompile(r.PathMatcher)
+		compiled[i].SleepSec = r.SleepSeconds
 	}
 	return compiled
 }
