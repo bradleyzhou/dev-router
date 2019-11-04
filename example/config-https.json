@@ -1,0 +1,91 @@
+{
+    "server": {
+        "port": "8082",
+        "scheme": "https",
+        "keyPath": "./example/certs/localhost.key",
+        "certPath": "./example/certs/localhost.crt"
+    },
+
+    "staticServers": [
+        {
+            "prefix": "/use-static1/",
+            "root":   "./example/static/"
+        }
+    ],
+
+    "upstream": "https://www.w3.org",
+
+    "requestSleepers": [
+        {
+            "path": "^\\/[^u][^s][^e].*favicon.ico$",
+            "seconds": 5
+        }
+    ],
+
+    "requestDispatchers": [
+        {
+            "path": "^\\/[^u][^s][^e].*favicon.ico$",
+            "destination": {
+                "host": "${HOST}",
+                "scheme": "${SCHEME}",
+                "path": "/use-static1/favicon.ico"
+            }
+        },
+        {
+            "path": "^\\/secw3",
+            "destination": {
+                "host": "www.w3.org",
+                "scheme": "https",
+                "path": ""
+            }
+        },
+        {
+            "path": "^\\/validw3",
+            "destination": {
+                "host": "validator.w3.org",
+                "scheme": "https",
+                "path": ""
+            }
+        }
+    ],
+
+    "addRequestCookie": [
+        {
+            "path": "^\\/",
+            "name": "dev-router-1",
+            "value": "upstream-server-will-see-this"
+        }
+    ],
+
+    "responseModifiers": {
+        "header": [
+            {
+                "name": "Set-Cookie",
+                "matcher": "www\\.w3\\.org",
+                "replacer": "${DOMAIN}"
+            },
+            {
+                "name": "Location",
+                "matcher": "https:\\/\\/www\\.w3\\.org",
+                "replacer": "http://${DOMAIN}"
+            }
+        ],
+        "body": [
+            {
+                "matcher":  "https:\\/\\/www\\.w3\\.org",
+                "replacer": "http://${HOST}/secw3"
+            },
+            {
+                "matcher":  "https:\\/\\/validator\\.w3\\.org",
+                "replacer": "http://${HOST}/validw3"
+            }
+        ]
+    },
+
+    "addResponseHeader": [
+        {
+            "name": "X-DEV",
+            "Value": "dev-router-modded"
+        }
+    ]
+}

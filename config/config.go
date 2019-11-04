@@ -8,9 +8,12 @@ import (
 )
 
 // Server is the section for the router server itself.
+// Key and Cert are required if Scheme is "https".
 type Server struct {
 	Port   string `json:"port"`
 	Scheme string `json:"scheme"`
+	Key    string `json:"keyPath"`
+	Cert   string `json:"certPath"`
 }
 
 // StaticServer is the section for the additional local static file server.

@@ -13,6 +13,8 @@ import (
 type Config struct {
 	ServerPort   string
 	ServerScheme string
+	ServerKey    string
+	ServerCert   string
 
 	BodyRules         []modifier.PatchBodyRule
 	ResHeaderRules    []modifier.PatchHeaderRule
@@ -29,6 +31,8 @@ func CompileConfig(conf config.Config) Config {
 	return Config{
 		ServerPort:                 conf.Server.Port,
 		ServerScheme:               conf.Server.Scheme,
+		ServerKey:                  conf.Server.Key,
+		ServerCert:                 conf.Server.Cert,
 		BodyRules:                  compileBodyPatchers(conf),
 		DefaultRequestDispatchRule: compileDefaultDispatcher(conf.Upstream),
 		RequestDispatchRules:       compileDispatchers(conf),

@@ -2,7 +2,7 @@
 
 A router for debugging and developing web apps.
 
-Start a HTTP server and it will modify the requests your send, and the responses you get, according to the rule you specified.
+Start a HTTP/HTTPS server and it will modify the requests your send, and the responses you get, according to the rule you specified.
 
 Use cases:
 - You only want to replace some static JS and CSS files with local files for an existing website.
@@ -23,10 +23,16 @@ Get a released bin from [the releases](https://github.com/bradleyzhou/dev-router
 
 Then:
 ```bash
+# for a http server
 dev-router -conf=example/config.json
+
+# or if you need a https/h2 server
+dev-router -conf=example/config-https.json
 ```
 
-Then visit http://localhost:8081 to see the effect.
+Then visit http://localhost:8081 or https://localhost:8082 to see the effect.
+
+If you are getting certificate errors, you might want to trust the certificate you prepared(self-signed), or just get a valid certificate. Just search the web for the steps to get a valid certificate or trust the self-signed certificate.
 
 ## Custom rules
 

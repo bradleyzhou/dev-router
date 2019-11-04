@@ -10,6 +10,7 @@ import (
 	"log"
 	"net/http"
 	"net/http/httputil"
+	"strings"
 	"time"
 
 	"github.com/bradleyzhou/dev-router/config"
@@ -181,9 +182,12 @@ func main() {
 
 	server.HandleFunc("/", serveReverseProxy)
 
-	log.Printf("Start a router at port %v", serverConf.ServerPort)
-	if err := http.ListenAndServe(":"+serverConf.ServerPort, server); err != nil {
-		panic(err)
+	isHTTPS := strings.Contains(strings.ToLower(serverConf.ServerScheme), "https")
+	if isHTTPS {
+		log.Printf("Start a router at port %v using https", serverConf.ServerPort)
+		log.Fatal(http.ListenAndServeTLS(":"+serverConf.ServerPort, serverConf.ServerCert, serverConf.ServerKey, server))
+	} else {
+		log.Printf("Start a router at port %v using http", serverConf.ServerPort)
+		log.Fatal(http.ListenAndServe(":"+serverConf.ServerPort, server))
 	}
-
 }
