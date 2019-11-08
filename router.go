@@ -13,6 +13,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/andybalholm/brotli"
+
 	"github.com/bradleyzhou/dev-router/config"
 	"github.com/bradleyzhou/dev-router/configure"
 	"github.com/bradleyzhou/dev-router/modifier"
@@ -137,6 +139,10 @@ func serveReverseProxy(res http.ResponseWriter, req *http.Request) {
 		case "gzip":
 			res.Header.Del("Content-Encoding")
 			body, _ := gzip.NewReader(res.Body)
+			resBody, _ = ioutil.ReadAll(body)
+		case "br":
+			res.Header.Del("Content-Encoding")
+			body := brotli.NewReader(res.Body)
 			resBody, _ = ioutil.ReadAll(body)
 		default:
 			resBody, _ = ioutil.ReadAll(res.Body)
